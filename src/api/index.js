@@ -98,7 +98,7 @@ export const createTrade=(params)=> ajax(BASE_URL +'/api/create_trade',{params},
 export const getShoppingRecord=(user_id)=>ajax(BASE_URL + '/api/check_shopping_record',user_id);
 
 // 完成订单
-export const finishShoppingRecord=(id)=>ajax(BASE_URL + '/api/finish_shopping',id,'POST');
+export const finishShoppingRecord=(id)=>ajax(BASE_URL + '/api/finish_shopping',{id},'POST');
 
 // 取消订单
 export const cancelShoppingRecord=(id)=>ajax(BASE_URL + '/api/cancel_shopping_record',id,'POST');
@@ -120,3 +120,12 @@ export const adminLogout = () => ajax(BASE_URL + '/api/admin_logout');
 
 // 请求所有用户
 export const getAllUsers = () => ajax(BASE_URL + '/api/admin_allusers');
+
+// 冻结用户
+export const frozenUser = (id) => ajax(BASE_URL + '/api/frozen_user',{id},'POST');
+
+// 恢复用户
+export const recoveryUser = (id) => ajax(BASE_URL + '/api/recovery_user',{id},'POST');
+
+//获取所有订单
+export const reqAllShoppingRecord = () => ajax(BASE_URL + 'api/all_shopping_record');

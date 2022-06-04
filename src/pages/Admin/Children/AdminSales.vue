@@ -12,25 +12,11 @@
       </div>
       <div class="goods-item">
         <span>名称</span>
-        <el-input
-          type="text"
-          placeholder="请输入内容"
-          v-model="goodsInfo.short_name"
-          clearable
-          style="width:350px"
-        >
-        </el-input>
+        <span>{{goodsInfo.short_name}}</span>
       </div>
       <div class="goods-item">
         <span>分类</span>
-        <el-select v-model="goodsInfo.category" placeholder="请选择">
-          <el-option
-           v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-          </el-option>
-        </el-select>
+        <span>{{goodsInfo.category}}</span>
       </div>
       <div class="goods-item">
         <span>价格</span>
@@ -65,7 +51,8 @@
         >
         </el-input>
       </div>
-      <button @click="saveGoodsInfo()">编辑商品信息</button>
+      <button @click="saveGoodsInfo()">实施折扣</button>
+      <button @click="saveGoodsInfo()">取消折扣</button>
     </div>
   </div>
 </template>

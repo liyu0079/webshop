@@ -4,7 +4,7 @@
       class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
       <router-link
         class="navbar-brand col-sm-3 col-md-2 mr-0"
-        to="/home">乐购商城
+        to="/home">在线购物商城
       </router-link>
       <span
         class="nav_title">欢迎来到后台管理界面</span>
@@ -41,7 +41,7 @@
                 alt="...">
             </a>
             <el-menu
-              default-active="1"
+              default-active="$route.path"
               class="el-menu-vertical-demo">
               <el-menu-item
                 index="1"
@@ -68,7 +68,21 @@
               </el-menu-item>
               <el-menu-item
                 index="4"
+                @click="goTo('/admin/adminupdate')">
+                <i
+                  class="el-icon-collection-tag"></i>
+                <span>商品编辑</span>
+              </el-menu-item>
+              <el-menu-item
+                index="5"
                 @click="goTo('/admin/adminsales')">
+                <i
+                  class="el-icon-collection-tag"></i>
+                <span>折扣管理</span>
+              </el-menu-item>
+               <el-menu-item
+                index="6"
+                @click="goTo('/admin/ordercontrol')">
                 <i
                   class="el-icon-collection-tag"></i>
                 <span>订单管理</span>

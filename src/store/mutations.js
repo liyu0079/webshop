@@ -22,7 +22,9 @@ import {
   CANCEL_SHOPPING,
   DEL_SINGLE_RECORD,
   DEL_ALL_RECORD,
-  SEARCH_KEYWORDS
+  SEARCH_KEYWORDS,
+  FROZEN_USER,
+  RECOVERY_USER
 } from './mutation-types'
 
 export default {
@@ -160,14 +162,14 @@ export default {
     id
   }) {
     const index = state.shoppingrecord.indexOf(id);
-    state.shoppingrecord[index].state = 2;
+    state.shoppingrecord[index].status = 2;
   },
   // 删除记录不是真正删除数据库，而是不对用户进行显示
   [DEL_SINGLE_RECORD](state, {
     id
   }) {
     const index = state.shoppingrecord.indexOf(id);
-    state.shoppingrecord[index].state = 3;
+    state.shoppingrecord[index].status = 3;
   },
 
   [DEL_ALL_RECORD](state, {
@@ -175,7 +177,7 @@ export default {
   }) {
     state.shoppingrecord.forEach(function (item) {
       if (state.shoppingrecord[item].user_id === user_id) {
-        state.shoppingrecord[item].state = 3;
+        state.shoppingrecord[item].status = 3;
       }
     });
   },
@@ -185,5 +187,18 @@ export default {
   }) {
     state.searchresults = searchresults;
   },
+  
+  [FROZEN_USER](state,{
+    id
+  }){
+    const index = state.userInfo.indexOf(id);
+    state.userInfo[index].user_status = 0;
+  },
 
+  [RECOVERY_USER](state,{
+    id
+  }){
+    const index = state.userInfo.indexOf(id);
+    state.userInfo[index].user_status = 1;
+  },
 }

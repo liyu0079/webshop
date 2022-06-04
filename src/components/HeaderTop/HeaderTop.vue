@@ -2,7 +2,7 @@
   <!-- 头部导航 -->
   <div class="header_nav">
     <div>
-      <p>Hi~欢迎来到乐购商城</p>
+      <p>Hi~欢迎来到在线购物商城</p>
       <div
         class="locationWrapper">
         <svg

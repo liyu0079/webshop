@@ -52,7 +52,7 @@
               src="./img/no_login.jpg"
               v-else />
           </div>
-          <p>您好，这里是乐购商城</p>
+          <p>您好，这里是在线购物商城</p>
           <p
             v-if="!userInfo.id">
             <router-link

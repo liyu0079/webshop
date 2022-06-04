@@ -21,6 +21,8 @@ import {
   getReceiveInfo,
   updateReceiveInfo,
   delteReceiveInfo,
+  frozenUser,
+  recoveryUser
 } from '../api'
 
 import {
@@ -45,7 +47,9 @@ import {
   SEARCH_KEYWORDS,
   RECEIVE_INFO,
   CHANGE_RECEIVE_INFO,
-  DEL_RECEIVE_INFO
+  DEL_RECEIVE_INFO,
+  FROZEN_USER,
+  RECOVERY_USER
 } from './mutation-types'
 
 export default {
@@ -236,7 +240,7 @@ export default {
     }
   },
 
-  // 请求订单记录数据
+  // 请求单个用户订单记录数据
   async reqShoppingRecord({
     commit
   }, user_id) {
@@ -255,7 +259,7 @@ export default {
     const result = await cancelShoppingRecord(id);
     if (result.success_code === 200) {
       commit(CANCEL_SHOPPING, {
-        status: result.state
+        status: result.status
       })
     }
   },
@@ -299,5 +303,6 @@ export default {
         searchresults
       });
     }
-  }
+  },
+
 }

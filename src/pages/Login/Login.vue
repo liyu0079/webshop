@@ -10,7 +10,7 @@
           class="login-logo">
           <img
             src="./images/logo-round.png"
-            alt="乐购商城"
+            alt="在线购物商城"
             width="150">
         </div>
         <!-- 面板标题 -->

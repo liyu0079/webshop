@@ -20,4 +20,6 @@ export const CANCEL_SHOPPING = 'cancel_shopping' //取消订单
 export const DEL_SINGLE_RECORD = 'del_single_record' //删除单条订单记录
 export const DEL_ALL_RECORD = 'del_all_record' //删除全部订单记录
 export const SEARCH_KEYWORDS = 'search_goods'; // 关键词搜索
+export const FROZEN_USER = 'frozen_user';//冻结用户
+export const RECOVERY_USER = 'recovery_user';//恢复用户
 

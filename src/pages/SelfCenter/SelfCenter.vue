@@ -4,7 +4,7 @@
       class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
       <router-link
         class="navbar-brand col-sm-3 col-md-2 mr-0"
-        to="/home">乐购商城
+        to="/home">在线购物商城
       </router-link>
       <ul
         class="navbar-nav px-3">

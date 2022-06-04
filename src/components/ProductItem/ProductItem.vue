@@ -9,7 +9,7 @@
       </p>
       <p>{{ pro.short_name }}
       </p>
-      <p>乐购商城自营店</p>
+      <p>在线购物商城自营店</p>
     </div>
     <div class="add_btn">
       <a

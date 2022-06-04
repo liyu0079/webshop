@@ -23,11 +23,13 @@ const Update = ()=> import('./../pages/SelfCenter/Children/Update');
 const EditPwd = ()=> import('./../pages/SelfCenter/Children/EditPwd');
 const EditPhone = ()=> import('./../pages/SelfCenter/Children/EditPhone');
 const Sales = ()=> import('./../pages/SelfCenter/Children/Sales');
+const SetReceive = ()=> import('./../pages/SelfCenter/Children/SetReceive');
 const AdminSales = ()=> import('./../pages/Admin/Children/AdminSales');
 const AddGoods = ()=> import('./../pages/Admin/Children/AddGoods');
 const AdminGoods = ()=> import('./../pages/Admin/Children/AdminGoods');
 const AdminUpdate = ()=> import('./../pages/Admin/Children/AdminUpdate');
 const AdminUsers = ()=> import('./../pages/Admin/Children/AdminUsers');
+const OrderControl = ()=> import('./../pages/Admin/Children/OrderControl');
 
 // 2. 声明使用
 Vue.use(VueRouter);
@@ -68,6 +70,7 @@ export default  new VueRouter({
       {path: 'editpwd', component: EditPwd},
       {path: 'editphone', component: EditPhone},
       {path: 'sales', component: Sales},
+      {path: 'setreceive',component:SetReceive},
       {path: '/selfcenter',redirect: '/selfcenter/profile'}
     ],
   },
@@ -109,6 +112,7 @@ export default  new VueRouter({
       {path: 'addgoods', component: AddGoods},
       {path: 'admingoods', component: AdminGoods},
       {path: 'adminupdate', component: AdminUpdate},
+      {path: 'ordercontrol',component: OrderControl},
       {path: '/admin',redirect: '/admin/admingoods'}
     ],
   },
