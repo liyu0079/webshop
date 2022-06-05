@@ -124,11 +124,11 @@
                       <el-container>
                         <el-button
                           type="text"
-                          @click="dialogVisible = true">
+                          @click="dialogVisible1 = true">
                           申请退款
                         </el-button>
                         <el-dialog
-                          :visible.sync="dialogVisible"
+                          :visible.sync="dialogVisible1"
                           width="25%"
                           :before-close="handleClose"
                           class="dialog">
@@ -143,7 +143,7 @@
                               确定
                             </el-button>
                             <el-button
-                              @click="dialogVisible = false">
+                              @click="dialogVisible1 = false">
                               取消
                             </el-button>
                           </span>
@@ -160,11 +160,11 @@
                       <el-container>
                         <el-button
                           type="text"
-                          @click="dialogVisible = true">
+                          @click="dialogVisible2 = true">
                           确认收货
                         </el-button>
                         <el-dialog
-                          :visible.sync="dialogVisible"
+                          :visible.sync="dialogVisible2"
                           width="25%"
                           :before-close="handleClose"
                           class="dialog">
@@ -179,7 +179,7 @@
                               确定
                             </el-button>
                             <el-button
-                              @click="dialogVisible = false">
+                              @click="dialogVisible2 = false">
                               取消
                             </el-button>
                           </span>
@@ -196,11 +196,11 @@
                       <el-container>
                         <el-button
                           type="text"
-                          @click="dialogVisible = true">
+                          @click="dialogVisible3 = true">
                           取消订单
                         </el-button>
                         <el-dialog
-                          :visible.sync="dialogVisible"
+                          :visible.sync="dialogVisible3"
                           width="25%"
                           :before-close="handleClose"
                           class="dialog">
@@ -215,7 +215,7 @@
                               确定
                             </el-button>
                             <el-button
-                              @click="dialogVisible = false">
+                              @click="dialogVisible3 = false">
                               取消
                             </el-button>
                           </span>
@@ -314,15 +314,12 @@
         </li>
       </ul>
     </div>
-    <el-button type="primary"
-      @click="getReload">刷新
-    </el-button>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { deleteShoppingRecord,shoppingStepfour,refundFirst } from './../../api/index'
+import { deleteShoppingRecord, shoppingStepfour, refundFirst } from './../../api/index'
 export default {
   name: '',
   data() {
@@ -332,10 +329,11 @@ export default {
       pageSize: 4,
       tableData: [],
       tempData: [],
-      dialogVisible: false,
+      dialogVisible1: false,
+      dialogVisible2: false,
+      dialogVisible3: false,
     }
   },
-  inject: ['reload'],
   mounted() {
     // 获取订单数据
     this.getAllrecord()
@@ -394,42 +392,49 @@ export default {
     },
     cancelPay(id) {
       this.$store.dispatch('celShoppingRecord', { id })
-      this.dialogVisible = false
+      this.dialogVisible1 = false
       this.$router.go(0)
     },
-    async delrecord(id,status) {
-      if(status == 0){
-         this.$confirm('未付款订单不可删除！', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '退出',
-        type: 'warning',
-      }) 
-      }else{
-      this.$confirm('您确定永久删除该订单记录吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      })
-        .then(async () => {
-          let result = await deleteShoppingRecord(id)
-          if (result.success_code === 200) {
-            this.$router.go(0)
-            this.$message({
-              type: 'success',
-              message: '已删除',
-            })
-          }
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除',
-          })
-        })
-      }   
+    async orderReceive(id) {
+      await shoppingStepfour(id)
+      this.dialogVisible2 = false
+      this.$router.go(0)
     },
-    getReload() {
-      this.reload() //调用刷新
+    async orderRefund(id) {
+      await refundFirst(id)
+      this.dialogVisible3 = false
+      this.$router.go(0)
+    },
+    async delrecord(id, status) {
+      if (status == 0) {
+        this.$confirm('未付款订单不可删除！', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '退出',
+          type: 'warning',
+        })
+      } else {
+        this.$confirm('您确定永久删除该订单记录吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        })
+          .then(async () => {
+            let result = await deleteShoppingRecord(id)
+            if (result.success_code === 200) {
+              this.$router.go(0)
+              this.$message({
+                type: 'success',
+                message: '已删除',
+              })
+            }
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除',
+            })
+          })
+      }
     },
   },
 }

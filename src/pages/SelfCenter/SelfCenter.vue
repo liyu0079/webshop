@@ -75,32 +75,14 @@
                   </el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
-              <el-submenu
-                index="3">
-                <template
-                  slot="title">
-                  <i
-                    class="el-icon-collection-tag"></i>
-                  <span>我的订单</span>
-                </template>
-                <el-menu-item-group>
-                  <el-menu-item
-                    index="3-1"
-                    @click="goTo('/selfcenter/sales')">
-                    待付款
-                  </el-menu-item>
-                  <el-menu-item
-                    index="3-2"
-                    @click="goTo('/selfcenter/sales')">
-                    待发货
-                  </el-menu-item>
-                  <el-menu-item
-                    index="3-3"
-                    @click="goTo('/selfcenter/sales')">
-                    待收货
-                  </el-menu-item>
-                </el-menu-item-group>
-              </el-submenu>
+              <el-menu-item
+                index="3"
+                @click="goTo('/selfcenter/setreceive')">
+                <i
+                  class="el-icon-document-copy"></i>
+                <span
+                  slot="title">收货地址</span>
+              </el-menu-item>
             </el-menu>
           </div>
         </nav>
@@ -142,7 +124,7 @@ export default {
             message: '退出成功!',
           })
           let result = this.logOut({})
-          this.$router.replace('/home')
+          this.$router.replace('/login')
           window.localStorage.removeItem('userInfo')
         })
         .catch(() => {

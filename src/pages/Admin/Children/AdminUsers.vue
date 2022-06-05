@@ -23,17 +23,24 @@
         prop="user_address"
         label="住址">
       </el-table-column>
-       <el-table-column
+      <el-table-column
+        prop="user_status"
+        label="状态">
+      </el-table-column>
+      <el-table-column
         label="操作">
         <template
           slot-scope="props">
           <el-button
             size="mini"
+            type="primary"
+            v-if="props.row.user_status == '已冻结'"
             @click="handleRecovery(props.$index, props.row)">
             恢复</el-button>
           <el-button
             size="mini"
             type="danger"
+            v-if="props.row.user_status == '可使用'"
             @click="handleFrozen(props.$index, props.row)">
             冻结</el-button>
         </template>
@@ -43,24 +50,33 @@
 </template>
 
 <script>
-  import {getAllUsers,frozenUser,recoveryUser} from './../../../api/index'
-  export default {
-    data() {
-      return {
-        tableData: []
+import { getAllUsers, frozenUser, recoveryUser } from './../../../api/index'
+export default {
+  data() {
+    return {
+      tableData: [],
+    }
+  },
+  mounted() {
+    this.getUsers()
+  },
+  methods: {
+    async getUsers() {
+      const results = await getAllUsers()
+      if (results.success_code === 200) {
+        this.tableData = results.message
+        this.tableData.forEach((data, index) => {
+          if (typeof data.user_status != 'string') {
+            if (data.user_status == 0) {
+              data.user_status = '已冻结'
+            } else {
+              data.user_status = '可使用'
+            }
+          }
+        })
       }
     },
-    mounted(){
-      this.getUsers();
-    },
-    methods: {
-      async getUsers(){
-        const results = await getAllUsers();
-        if(results.success_code === 200){
-          this.tableData = results.message;
-        }
-      },
-      async handleRecovery(index, row) {
+    async handleRecovery(index, row) {
       this.$confirm('您确定要解封该用户吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -69,6 +85,7 @@
         .then(async () => {
           let result = await recoveryUser(row.id)
           if (result.success_code === 200) {
+            this.$router.go(0)
             this.$message({
               type: 'success',
               message: '已解封',
@@ -91,6 +108,7 @@
         .then(async () => {
           let result = await frozenUser(row.id)
           if (result.success_code === 200) {
+            this.$router.go(0)
             this.$message({
               type: 'success',
               message: '已冻结',
@@ -104,12 +122,13 @@
           })
         })
     },
-    }
-  }
+  },
+}
 </script>
 
 <style scoped>
-#admin-users{
+#admin-users {
   margin-left: 300px;
+  margin-top: 40px;
 }
 </style>

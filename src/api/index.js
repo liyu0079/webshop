@@ -83,13 +83,13 @@ export const discountGoods = (params) => ajax(BASE_URL + '/api/goods_discount', 
 export const getCartsGoods = (params) => ajax(BASE_URL + '/api/cart_goods', params);
 
 // 设置收货地址信息
-export const createReceiveInfo = (params)=> ajax(BASE_URL +'/api/create_receive_info',{params},'POST');
+export const createReceiveInfo = (form,user_id)=> ajax(BASE_URL +'/api/create_receive_info',{form,user_id},'POST');
 
 // 获取收货地址信息
-export const getReceiveInfo = (user_id)=> ajax(BASE_URL +'/api/receive_info',user_id);
+export const getReceiveInfo = (user_id)=> ajax(BASE_URL +'/api/receive_info',{user_id});
 
 // 修改收货地址信息
-export const updateReceiveInfo = (params)=> ajax(BASE_URL +'/api/update_receive_info',params,'POST');
+export const updateReceiveInfo = (form)=> ajax(BASE_URL +'/api/update_receive_info',{form},'POST');
 
 // 删除收货地址信息
 export const delteReceiveInfo = (id)=> ajax(BASE_URL +'/api/delete_receive_info',id,'POST');

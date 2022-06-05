@@ -270,6 +270,13 @@ export default {
           this.pwd = '' // 密码
           this.user_name = '' // 用户名
           this.captcha = '' // 图形验证码
+        } else if(result.err_code === 301){
+            MessageBox({
+            type: 'error',
+            message: '登录失败, 用户已被冻结!',
+            showClose: true,
+          })
+          return
         } else {
           this.userInfo = {
             message: '登录失败, 手机号或验证码不正确!',
@@ -311,12 +318,20 @@ export default {
           this.pwd = '' // 密码
           this.user_name = '' // 账号
           this.captcha = '' // 图形验证码
-        } else {
+        } else if(result.err_code === 0){
           MessageBox({
-            type: 'info',
+            type: 'error',
             message: '登录失败, 账号或密码或验证码不正确!',
             showClose: true,
           })
+          return
+        }else{
+            MessageBox({
+            type: 'error',
+            message: '登录失败, 用户已被冻结!',
+            showClose: true,
+          })
+          return
         }
       }
 

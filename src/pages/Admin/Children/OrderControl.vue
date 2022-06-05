@@ -50,32 +50,26 @@
           <el-button
           type="primary"
             size="mini"
-            v-if="props.row.status == 0"
-            @click="handlePost(props.$index, props.row)">
-            aaa</el-button>
-          <el-button
-          type="primary"
-            size="mini"
-            v-if="prop.row.status == 11"
+            v-if="props.row.status == '未发货'"
             @click="handlePost(props.$index, props.row)">
             确认发货</el-button>
           <el-button
           type="primary"
             size="mini"
-            v-if="props.row.status == 12"
+            v-if="props.row.status == '已发货'"
             @click="handleArrive(props.$index, props.row)">
             确认送达</el-button>
           <el-button
             size="mini"
             type="primary"
-             v-if="props.row.status == 14"
+            v-if="props.row.status == '已收货'"
             style="margin-top:5px;"
             @click="handleFinish(props.$index, props.row)">
             完成订单</el-button>
             <el-button
             size="mini"
             type="primary"
-             v-if="props.row.status == 21"
+            v-if="props.row.status == '退款中'"
             style="margin-top:5px;"
             @click="handleRefund(props.$index, props.row)">
             确认退款</el-button>
@@ -211,6 +205,7 @@ export default {
         .then(async () => {
           let result = await shoppingSteptwo(row.id)
           if (result.success_code === 200) {
+            this.$router.go(0)
             this.$message({
               type: 'success',
               message: '已发货',
@@ -233,6 +228,7 @@ export default {
         .then(async () => {
           let result = await shoppingStepthree(row.id)
           if (result.success_code === 200) {
+            this.$router.go(0)
             this.$message({
               type: 'success',
               message: '已送达',
@@ -255,6 +251,7 @@ export default {
         .then(async () => {
           let result = await finishShoppingRecord(row.id)
           if (result.success_code === 200) {
+            this.$router.go(0)
             this.$message({
               type: 'success',
               message: '已完成',
@@ -277,6 +274,7 @@ export default {
         .then(async () => {
           let result = await refundSecond(row.id)
           if (result.success_code === 200) {
+            this.$router.go(0)
             this.$message({
               type: 'success',
               message: '已退款',

@@ -120,6 +120,7 @@ export default {
         type: 'warning',
       })
         .then(() => {
+          this.$router.replace('/login');
           this.$message({
             type: 'success',
             message: '退出成功!',

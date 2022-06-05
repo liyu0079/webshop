@@ -17,6 +17,7 @@ const Trade = () => import('./../pages/Trade/Trade');
 const Pay = () => import('./../pages/Pay/Pay');
 const PaySuccess = () => import('./../pages/PaySuccess/PaySuccess');
 const OrderCenter = () => import('./../pages/OrderCenter/OrderCenter');
+const NotFound = () => import('./../components/NotFound/NotFound');
 
 const Profile = () => import('./../pages/SelfCenter/Children/Profile');
 const Update = () => import('./../pages/SelfCenter/Children/Update');
@@ -36,154 +37,165 @@ Vue.use(VueRouter);
 
 // 3. 输出路由对象
 export default new VueRouter({
-  // 3.1 配置一级路由
-  routes: [{
-      path: '/home',
-      component: Home,
-      meta: {
-        showHeaderTop: true,
-        showHeaderSearch: true
-      }
-    },
-    {
-      path: '/login',
-      component: Login
-    },
-    {
-      path: '/register',
-      component: Register
-    },
-    {
-      path: '/search/:id/:pageNo',
-      component: Search,
-      meta: {
-        showHeaderTop: true,
-        showHeaderSearch: true
-      }
-    },
-    {
-      path: '/goods/:id',
-      component: Goods,
-      meta: {
-        showHeaderTop: true
-      }
-    },
-    {
-      path: '/selfcenter',
-      component: SelfCenter,
-      children: [{
-          path: 'profile',
-          component: Profile
+      // 3.1 配置一级路由
+      routes: [{
+          path: '/home',
+          component: Home,
+          meta: {
+            showHeaderTop: true,
+            showHeaderSearch: true
+          }
         },
         {
-          path: 'update',
-          component: Update
+          path: '/login',
+          component: Login
         },
         {
-          path: 'editpwd',
-          component: EditPwd
+          path: '/register',
+          component: Register
         },
         {
-          path: 'editphone',
-          component: EditPhone
+          path: '/search/:id/:pageNo',
+          component: Search,
+          meta: {
+            showHeaderTop: true,
+            showHeaderSearch: true
+          }
         },
         {
-          path: 'sales',
-          component: Sales
-        },
-        {
-          path: 'setreceive',
-          component: SetReceive
+          path: '/goods/:id',
+          component: Goods,
+          meta: {
+            showHeaderTop: true
+          }
         },
         {
           path: '/selfcenter',
-          redirect: '/selfcenter/profile'
-        }
-      ],
-    },
-    {
-      path: '/shopcar',
-      component: ShopCar,
-      meta: {
-        showHeaderTop: true
-      }
-    },
-    {
-      path: '/trade',
-      component: Trade,
-      meta: {
-        showHeaderTop: true
-      }
-    },
-    {
-      path: '/pay',
-      component: Pay,
-      meta: {
-        showHeaderTop: true
-      }
-    },
-    {
-      path: '/paysuccess',
-      component: PaySuccess,
-      meta: {
-        showHeaderTop: true
-      }
-    },
-    {
-      path: '/ordercenter',
-      component: OrderCenter,
-      meta: {
-        showHeaderTop: true
-      }
-    },
-    {
-      path: '/adminlogin',
-      component: AdminLogin
-    },
-    {
-      path: '/admin',
-      component: Admin,
-      children: [{
-          path: 'adminsales',
-          component: AdminSales
+          component: SelfCenter,
+          children: [{
+              path: 'profile',
+              component: Profile
+            },
+            {
+              path: 'update',
+              component: Update
+            },
+            {
+              path: 'editpwd',
+              component: EditPwd
+            },
+            {
+              path: 'editphone',
+              component: EditPhone
+            },
+            {
+              path: 'sales',
+              component: Sales
+            },
+            {
+              path: 'setreceive',
+              component: SetReceive
+            },
+            {
+              path: '/selfcenter',
+              redirect: '/selfcenter/profile'
+            }
+          ],
         },
         {
-          path: 'adminusers',
-          component: AdminUsers
+          path: '/shopcar',
+          component: ShopCar,
+          meta: {
+            showHeaderTop: true
+          }
         },
         {
-          path: 'addgoods',
-          component: AddGoods
+          path: '/trade',
+          component: Trade,
+          meta: {
+            showHeaderTop: true
+          }
         },
         {
-          path: 'admingoods',
-          component: AdminGoods
+          path: '/pay',
+          component: Pay,
+          meta: {
+            showHeaderTop: true
+          }
         },
         {
-          path: 'adminupdate',
-          component: AdminUpdate
+          path: '/paysuccess',
+          component: PaySuccess,
+          meta: {
+            showHeaderTop: true
+          }
         },
         {
-          path: 'ordercontrol',
-          component: OrderControl
+          path: '/ordercenter',
+          component: OrderCenter,
+          meta: {
+            showHeaderTop: true
+          }
+        },
+        {
+          path: '/adminlogin',
+          component: AdminLogin
         },
         {
           path: '/admin',
-          redirect: '/admin/admingoods'
+          component: Admin,
+          children: [{
+              path: 'adminsales',
+              component: AdminSales
+            },
+            {
+              path: 'adminusers',
+              component: AdminUsers
+            },
+            {
+              path: 'addgoods',
+              component: AddGoods
+            },
+            {
+              path: 'admingoods',
+              component: AdminGoods
+            },
+            {
+              path: 'adminupdate',
+              component: AdminUpdate
+            },
+            {
+              path: 'ordercontrol',
+              component: OrderControl
+            },
+            {
+              path: '/admin',
+              redirect: '/admin/admingoods'
+            }
+          ],
+        },
+        {
+          path: '/searchdetail',
+          component: SearchDetail,
+          meta: {
+            showHeaderTop: true,
+            showHeaderSearch: true
+          }
+        },
+        {
+          path: '/',
+          redirect: '/home'
+        },
+        {
+          path: '/notFound',
+          name:"404",
+          component: NotFound,
+        },
+        {
+          path: '*',
+          redirect: {
+            name: "404"
+          }
         }
-      ],
-    },
-    {
-      path: '/searchdetail',
-      component: SearchDetail,
-      meta: {
-        showHeaderTop: true,
-        showHeaderSearch: true
-      }
-    },
-    {
-      path: '/',
-      redirect: '/home'
-    },
-  ]
-});
+        ]
+      });
