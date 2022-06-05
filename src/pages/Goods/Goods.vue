@@ -24,7 +24,7 @@
               <div
                 class="promo_price">
                 <span
-                  class="tm-price">{{goodsDetail[0].price / 100 | moneyFormat}}</span>
+                  class="tm-price">{{(goodsDetail[0].discount/100) * goodsDetail[0].price / 100 | moneyFormat}}</span>
                 <b>优惠促销</b>
               </div>
             </dd>
@@ -33,11 +33,19 @@
             <dt>市场价</dt>
             <dd
               class="nor_price">
-              {{goodsDetail[0].normal_price /100 | moneyFormat }}
+              {{ goodsDetail[0].price /100 | moneyFormat }}
             </dd>
           </dl>
           <dl>
             <dt>本店优惠</dt>
+            <dd v-if="goodsDetail[0].discount!=100">折扣:
+              <span>{{goodsDetail[0].discount}}折</span>
+              &nbsp;&nbsp;
+            </dd>
+            <dd v-if="goodsDetail[0].cut_count!=0">满减: 
+              <span>满{{goodsDetail[0].cut_count}}件，减{{goodsDetail[0].cut_price}}元</span>
+                 &nbsp;&nbsp;
+            </dd>
             <dd>包邮</dd>
           </dl>
           <dl>
@@ -236,7 +244,14 @@ export default {
     // 监听商品点击
     async dealWithCellBtnClick(goods) {
       // 1. 发送请求
-      // user_id, goods_id, goods_name, thumb_url, price, buy_count, counts
+      // user_id, goods_id, goods_name, thumb_url, price, total_amount, buy_count, counts
+      let total_amount = 0;
+      if(this.shopNum>=goods.cut_count&&goods.cut_count!=0){
+        total_amount = ((goods.discount/100)*goods.price*this.shopNum) - (goods.cut_price*100);
+      }else{
+        total_amount =(goods.discount/100)*goods.price*this.shopNum ;
+      }
+      console.log(total_amount)
       if (this.userInfo.user_name) {
         let result = await addGoodsToCart(
           this.userInfo.id,
@@ -245,6 +260,7 @@ export default {
           goods.thumb_url,
           goods.price,
           this.shopNum,
+          total_amount,
           goods.counts
         )
         if (result.success_code === 200) {

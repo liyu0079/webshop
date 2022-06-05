@@ -74,7 +74,7 @@
             ><i style="margin-left:-121px">{{ orderInfo.buy_count }}</i
             >件商品，总商品金额：</b
           >
-          <span>{{ orderInfo.buy_count*orderInfo.price / 100  | moneyFormat }}</span>
+          <span>{{ orderInfo.total_amount/100  | moneyFormat }}</span>
         </li>
         <li>
           <b>返现：</b>
@@ -88,7 +88,7 @@
     </div>
     <div class="trade">
       <div class="price">
-        应付金额: <span>{{ orderInfo.buy_count*orderInfo.price / 100  | moneyFormat }}</span>
+        应付金额: <span>{{ orderInfo.total_amount/100  | moneyFormat }}</span>
       </div>
       <div class="receiveInfo">
         寄送至:
@@ -148,8 +148,8 @@ export default {
           user_id : this.userInfo.id,
           goods_name : orderInfo.goods_name,
           buy_price : orderInfo.price,
-          total_amount: orderInfo.price * orderInfo.buy_count,
-          state:0,
+          total_amount: orderInfo.total_amount,
+          status:0,
           goods_img: orderInfo.thumb_url,
           buy_count: orderInfo.buy_count,
           receive_name: userDefaultAddress.receive_name,

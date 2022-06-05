@@ -16,7 +16,11 @@
       </div>
       <div class="goods-item">
         <span>分类</span>
-        <span>{{goodsInfo.category}}</span>
+        <span v-if="goodsInfo.category ==1 ">图书、音像</span>
+        <span v-if="goodsInfo.category ==2 ">家居生活</span>
+        <span v-if="goodsInfo.category ==3 ">服饰、箱包</span>
+        <span v-if="goodsInfo.category ==4 ">电子产品</span>
+        <span v-if="goodsInfo.category ==5 ">美食宝典</span>
       </div>
       <div class="goods-item">
         <span>价格</span>
@@ -30,75 +34,86 @@
         </el-input>
       </div>
       <div class="goods-item">
-        <span>库存</span>
+        <span>折扣</span>
         <el-input
           type="number"
-          placeholder="请输入库存"
-          v-model="goodsInfo.counts"
+          placeholder="请输入折扣"
+          v-model="goodsInfo.discount"
           clearable
-          style="width:100px"
+          style="width:100px;margin-right:-680px;"
         >
         </el-input>
+        <i>%</i>
       </div>
       <div class="goods-item">
-        <span>描述</span>
+        <span>满减</span>
+        <i style="margin-left:500px;">满</i>
         <el-input
-          type="text"
-          placeholder="请输入内容"
-          v-model="goodsInfo.goods_name"
+          type="number"
+          placeholder="请输入件数"
+          v-model="goodsInfo.cut_count"
           clearable
-          style="width:450px"
+          style="width:100px;"
         >
         </el-input>
-      </div>
-      <button @click="saveGoodsInfo()">实施折扣</button>
-      <button @click="saveGoodsInfo()">取消折扣</button>
+        <i>件，减</i>
+         <el-input
+          type="number"
+          placeholder="请输入减额"
+          v-model="goodsInfo.cut_price"
+          max="100"
+          clearable
+          style="width:100px;"
+        >
+        </el-input>
+        <i>元</i>
+      </div>                
+      <button type="text" @click="setDiscount()">设置折扣</button>
+      <button @click="removeDiscount()">取消折扣</button>
     </div>
   </div>
 </template>
 
 <script>
   import {mapState} from 'vuex';
-  import {changeGoodsInfo,getAllgoods} from './../../../api/index';
+  import {discountGoods} from './../../../api/index';
 
   export default {
     data() {
       return {
         goodsInfo: {},
-        options: [{
-          value: 1,
-          label: '图书、音像'
-        }, {
-          value: 2,
-          label: '家居生活'
-        },{
-          value: 3,
-          label: '服饰、箱包'
-        },{
-          value: 4,
-          label: '电子产品'
-        },{
-          value: 5,
-          label: '美食宝典'
-        }],
       }
     },
      mounted(){
         this.goodsInfo = JSON.parse(window.localStorage.getItem('goodsInfo'));
     },
     methods:{
-      // 修改商品信息
-      async saveGoodsInfo(){
+      // 设置商品折扣
+      async setDiscount(){
         this.goodsInfo.price = Number(this.goodsInfo.price);
-        this.goodsInfo.counts = Number(this.goodsInfo.counts);
-        let result = await changeGoodsInfo(this.goodsInfo);
+        this.goodsInfo.discount = Number(this.goodsInfo.discount);
+        this.goodsInfo.cut_count = Number(this.goodsInfo.cut_count);
+        this.goodsInfo.cut_price = Number(this.goodsInfo.cut_price);
+        let result = await discountGoods(this.goodsInfo);
         if(result.success_code === 200){
           this.$message({
               type: 'success',
-              message: '修改成功'
+              message: '设置成功'
             });
-          this.$router.replace('/admin');
-          getAllgoods();
+        }
+      },
+      // 取消商品折扣
+      async removeDiscount(){
+        this.goodsInfo.price = Number(this.goodsInfo.price);
+        this.goodsInfo.discount = Number(100);
+        this.goodsInfo.cut_count = Number(0);
+        this.goodsInfo.cut_price = Number(0);
+        let result = await discountGoods(this.goodsInfo);
+        if(result.success_code === 200){
+          this.$message({
+              type: 'success',
+              message: '取消成功'
+            });
         }
       }
     },

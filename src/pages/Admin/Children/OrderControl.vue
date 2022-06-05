@@ -50,15 +50,35 @@
           <el-button
           type="primary"
             size="mini"
+            v-if="props.row.status == 0"
+            @click="handlePost(props.$index, props.row)">
+            aaa</el-button>
+          <el-button
+          type="primary"
+            size="mini"
+            v-if="prop.row.status == 11"
             @click="handlePost(props.$index, props.row)">
             确认发货</el-button>
-            <br/>
+          <el-button
+          type="primary"
+            size="mini"
+            v-if="props.row.status == 12"
+            @click="handleArrive(props.$index, props.row)">
+            确认送达</el-button>
           <el-button
             size="mini"
-            type="success"
+            type="primary"
+             v-if="props.row.status == 14"
             style="margin-top:5px;"
             @click="handleFinish(props.$index, props.row)">
             完成订单</el-button>
+            <el-button
+            size="mini"
+            type="primary"
+             v-if="props.row.status == 21"
+            style="margin-top:5px;"
+            @click="handleRefund(props.$index, props.row)">
+            确认退款</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -75,7 +95,7 @@
 </template>
 
 <script>
-import { reqAllShoppingRecord } from './../../../api/index'
+import { reqAllShoppingRecord,shoppingSteptwo,shoppingStepthree,finishShoppingRecord,refundSecond } from './../../../api/index'
 import { mapState } from 'vuex'
 export default {
   data() {
@@ -114,10 +134,22 @@ export default {
           if(typeof(data.status)!='string'){
             if(data.status == 0){
                 data.status = '未付款'
-            }else if(data.status == 1){
-                data.status= '已付款'  
-            }else if(data.status == 2){
+            }else if(data.status == 10){
+                data.status= '已完成'  
+            }else if(data.status == 11){
+                data.status= '未发货'  
+            }else if(data.status == 12){
+                data.status= '已发货'  
+            }else if(data.status == 13){
+                data.status= '已送达'  
+            }else if(data.status == 14){
+                data.status= '已收货'  
+            }else if(data.status == 20){
                 data.status= '已取消'
+            }else if(data.status == 21){
+                data.status= '退款中'
+            }else if(data.status == 22){
+                data.status= '已退款'
             }else{
               data.status= '用户删除记录'
             }
@@ -145,10 +177,22 @@ export default {
           if(typeof(data.status)!='string'){
             if(data.status == 0){
                 data.status = '未付款'
-            }else if(data.status == 1){
-                data.status= '已付款'  
-            }else if(data.status == 2){
+            }else if(data.status == 10){
+                data.status= '已完成'  
+            }else if(data.status == 11){
+                data.status= '未发货'  
+            }else if(data.status == 12){
+                data.status= '已发货'  
+            }else if(data.status == 13){
+                data.status= '已送达'  
+            }else if(data.status == 14){
+                data.status= '已收货'  
+            }else if(data.status == 20){
                 data.status= '已取消'
+            }else if(data.status == 21){
+                data.status= '退款中'
+            }else if(data.status == 22){
+                data.status= '已退款'
             }else{
               data.status= '用户删除记录'
             }
@@ -157,6 +201,94 @@ export default {
         }
       })
       }
+    },
+    async handlePost(index, row){
+     this.$confirm('您确定发货吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+        .then(async () => {
+          let result = await shoppingSteptwo(row.id)
+          if (result.success_code === 200) {
+            this.$message({
+              type: 'success',
+              message: '已发货',
+            })
+          }
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消发货',
+          })
+        })
+    },
+    async handleArrive(index, row){
+      this.$confirm('您确认送达了吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+        .then(async () => {
+          let result = await shoppingStepthree(row.id)
+          if (result.success_code === 200) {
+            this.$message({
+              type: 'success',
+              message: '已送达',
+            })
+          }
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '未送达',
+          })
+        })
+    },
+    async handleFinish(index, row){
+      this.$confirm('您确定订单完成吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+        .then(async () => {
+          let result = await finishShoppingRecord(row.id)
+          if (result.success_code === 200) {
+            this.$message({
+              type: 'success',
+              message: '已完成',
+            })
+          }
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '未完成',
+          })
+        })
+    },
+    async handleRefund(index, row){
+     this.$confirm('您确定退款吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+        .then(async () => {
+          let result = await refundSecond(row.id)
+          if (result.success_code === 200) {
+            this.$message({
+              type: 'success',
+              message: '已退款',
+            })
+          }
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消退款',
+          })
+        })
     },
   },
 }

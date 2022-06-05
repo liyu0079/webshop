@@ -74,7 +74,7 @@
             </li>
             <li
               class="td td-sum">
-              <strong>{{goods.buy_count * goods.price /100 | moneyFormat}}</strong>
+              <strong>{{ goods.total_amount/100 | moneyFormat}}</strong>
             </li>
             <li
               class="td td-op">
@@ -117,12 +117,12 @@
           <span
             class="txt">合计（不含运费）：</span>
           <strong
-            class="selected_price">{{(orderInfo.price /100) | moneyFormat(orderInfo.price)}}</strong>
+            class="selected_price">{{(orderInfo.total_amount /100) | moneyFormat(orderInfo.price)}}</strong>
         </div>
         <div class="btn-area">
             <a
             class="btn-sumbit"
-            :class="{'btn-allow': orderInfo.price*orderInfo.buy_count}"
+            :class="{'btn-allow': orderInfo.total_amount}"
               @click="goTrade(orderInfo)"
               style=" text-decoration: none;">结&nbsp;算
             </a>
@@ -175,7 +175,7 @@ export default {
       let totalPrice = 0
       this.cartgoods.forEach((goods, index) => {
         if (goods.checked) {
-          totalPrice += (goods.price / 100) * goods.buy_count
+          totalPrice += goods.total_amount/100;
         }
       })
       this.totalPrice = totalPrice
@@ -240,7 +240,7 @@ export default {
         })
     },
     goTrade(orderInfo){
-      if(orderInfo.price){
+      if(orderInfo.total_amount){
         this.$router.push('/trade')
       }else{
          alert('购物车里空空如也')

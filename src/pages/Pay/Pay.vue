@@ -136,7 +136,7 @@
 import { mapState } from 'vuex'
 import qs from 'qs'
 import axios from 'axios'
-import {finishShoppingRecord} from './../../api/index'
+import {shoppingStepone} from './../../api/index'
 export default {
   name: 'Pay',
   data() {
@@ -175,7 +175,7 @@ export default {
       this.payInfo = result
     },
     //弹出框
-    async open() {
+   async open() {
       let id = this.payInfo.id;
       let data = {
         order_number: this.payInfo.order_number, //订单唯一编号
@@ -183,27 +183,20 @@ export default {
       axios({
          url: 'http://localhost:3000/api/pcpay',
          method:'POST',
-         headers:{
-           'content-type':'application/x-www-fromurlencoded'
-         },
+         
          data:qs.stringify(data)
       }).then(async (res)=>{
          this.data = res
          window.open(res.data.result)
-         let results =await finishShoppingRecord(id)
-         this.$router.push('/paysuccess')
-        //  if(results.success_code === 200){
-        //    this.$message({
-        //     type: 'success',
-        //     message: '付款成功',
-        //   })
-        //   this.$router.push('/paysuccess')
-        //  }else{
-        //    this.$message({
-        //     type: 'error',
-        //     message: '付款失败',
-        //   })
-        //  }
+         let results = await shoppingStepone(id)   
+         if(results.success_code === 200){
+          this.$router.push('/paysuccess')
+         }else{
+           this.$message({
+            type: 'error',
+            message: '付款失败',
+          })
+         }
       })
       // 代理到  http://localhost:3000/api/pcpay
       // instance.post(`http://localhost:3000/api/pcpay`, this.$qs.stringify(data)).then((res) => {

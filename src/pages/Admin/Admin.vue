@@ -124,7 +124,6 @@ export default {
     $route (to, from) 
     { 
       this.$router.go(0) 
-        // 获取订单数据
       } 
       },
   methods: {

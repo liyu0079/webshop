@@ -38,7 +38,7 @@
           v-for="(order, index) in tempData"
           :key="index">
           <div
-            v-if="order.state != 3">
+            v-if="order.status != 3">
             <thead>
               <tr>
                 <th
@@ -48,7 +48,8 @@
                     订单编号：{{ order.order_number }}
                     <span
                       class="pull-right delete"
-                      @click="delrecord(order.id)"><img
+                      style="cursor: pointer;"
+                      @click="delrecord(order.id,order.status)"><img
                         src="./images/delete.png" /></span>
                   </span>
                 </th>
@@ -95,11 +96,23 @@
                     @click="goPay(order.id)"
                     class="btn"
                     style="padding-left:0px;"
-                    v-if="order.state == 0">未付款</span>
+                    v-if="order.status == 0">未付款</span>
                   <span
-                    v-if="order.state == 1">已付款</span>
+                    v-if="order.status == 10">已完成</span>
                   <span
-                    v-if="order.state == 2">已取消</span>
+                    v-if="order.status == 11">未发货</span>
+                  <span
+                    v-if="order.status == 12">已发货</span>
+                  <span
+                    v-if="order.status == 13">已送达</span>
+                  <span
+                    v-if="order.status == 14">已收货</span>
+                  <span
+                    v-if="order.status == 20">已取消</span>
+                  <span
+                    v-if="order.status == 21">退款中</span>
+                  <span
+                    v-if="order.status == 22">已退款</span>
                 </td>
                 <td
                   :rowspan="order.length"
@@ -107,12 +120,79 @@
                   <ul
                     class="unstyled">
                     <li
-                      v-if="order.state == 1">
+                      v-if="order.status == 11">
+                      <el-container>
+                        <el-button
+                          type="text"
+                          @click="dialogVisible = true">
+                          申请退款
+                        </el-button>
+                        <el-dialog
+                          :visible.sync="dialogVisible"
+                          width="25%"
+                          :before-close="handleClose"
+                          class="dialog">
+                          <span
+                            style="font-size:20px;margin-left:80px">确定要申请退款吗</span>
+                          <span
+                            slot="footer"
+                            class="dialog-footer">
+                            <el-button
+                              type="primary"
+                              @click="orderRefund(order.id)">
+                              确定
+                            </el-button>
+                            <el-button
+                              @click="dialogVisible = false">
+                              取消
+                            </el-button>
+                          </span>
+                        </el-dialog>
+                      </el-container>
+                    </li>
+                    <li
+                      v-if="order.status == 12">
+                      <a href="mycomment.html"
+                        target="_blank">查看物流</a>
+                    </li>
+                    <li
+                      v-if="order.status == 13">
+                      <el-container>
+                        <el-button
+                          type="text"
+                          @click="dialogVisible = true">
+                          确认收货
+                        </el-button>
+                        <el-dialog
+                          :visible.sync="dialogVisible"
+                          width="25%"
+                          :before-close="handleClose"
+                          class="dialog">
+                          <span
+                            style="font-size:20px;margin-left:80px">确定该订单收货了吗</span>
+                          <span
+                            slot="footer"
+                            class="dialog-footer">
+                            <el-button
+                              type="primary"
+                              @click="orderReceive(order.id)">
+                              确定
+                            </el-button>
+                            <el-button
+                              @click="dialogVisible = false">
+                              取消
+                            </el-button>
+                          </span>
+                        </el-dialog>
+                      </el-container>
+                    </li>
+                    <li
+                      v-if="order.status == 10 || order.status == 14">
                       <a href="mycomment.html"
                         target="_blank">评价|晒单</a>
                     </li>
                     <li
-                      v-if="order.state == 0">
+                      v-if="order.status == 0">
                       <el-container>
                         <el-button
                           type="text"
@@ -124,11 +204,12 @@
                           width="25%"
                           :before-close="handleClose"
                           class="dialog">
-                          <span style="font-size:20px;margin-left:80px">确定要取消该订单吗</span>
+                          <span
+                            style="font-size:20px;margin-left:80px">确定要取消该订单吗</span>
                           <span
                             slot="footer"
                             class="dialog-footer">
-                             <el-button
+                            <el-button
                               type="primary"
                               @click="cancelPay(order.id)">
                               确定
@@ -233,15 +314,16 @@
         </li>
       </ul>
     </div>
-    <el-button type="primary" @click="getReload">刷新</el-button>
+    <el-button type="primary"
+      @click="getReload">刷新
+    </el-button>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { deleteShoppingRecord } from './../../api/index'
+import { deleteShoppingRecord,shoppingStepfour,refundFirst } from './../../api/index'
 export default {
-  
   name: '',
   data() {
     return {
@@ -253,7 +335,7 @@ export default {
       dialogVisible: false,
     }
   },
-  inject:['reload'],
+  inject: ['reload'],
   mounted() {
     // 获取订单数据
     this.getAllrecord()
@@ -267,14 +349,13 @@ export default {
       return Math.ceil(this.shoppingrecord.length / this.pageSize)
     },
   },
-  watch: { 
-    $route (to, from) 
-    { 
-      this.$router.go(0) 
-        // 获取订单数据
-    this.getAllrecord()
-      } 
-      },
+  watch: {
+    $route(to, from) {
+      this.$router.go(0)
+      // 获取订单数据
+      this.getAllrecord()
+    },
+  },
   methods: {
     handleCurrentChange(val) {
       this.currentIndex = val
@@ -305,22 +386,39 @@ export default {
       this.$router.push('/pay?orderId=' + orderId)
     },
     handleClose(done) {
-        this.$confirm('确认关闭？')
-          .then(_ => {
-            done();
-          })
-          .catch(_ => {});
-      },
+      this.$confirm('确认关闭？')
+        .then((_) => {
+          done()
+        })
+        .catch((_) => {})
+    },
     cancelPay(id) {
-      this.$confirm('您确定要取消该订单吗？', '提示', {
+      this.$store.dispatch('celShoppingRecord', { id })
+      this.dialogVisible = false
+      this.$router.go(0)
+    },
+    async delrecord(id,status) {
+      if(status == 0){
+         this.$confirm('未付款订单不可删除！', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '退出',
+        type: 'warning',
+      }) 
+      }else{
+      this.$confirm('您确定永久删除该订单记录吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
       })
-        .then(() => {
-         this.$store.dispatch('celShoppingRecord', { id })
-          this.dialogVisible = false
-          this.$router.go(0)
+        .then(async () => {
+          let result = await deleteShoppingRecord(id)
+          if (result.success_code === 200) {
+            this.$router.go(0)
+            this.$message({
+              type: 'success',
+              message: '已删除',
+            })
+          }
         })
         .catch(() => {
           this.$message({
@@ -328,15 +426,11 @@ export default {
             message: '已取消删除',
           })
         })
-    },
-    delrecord(id) {
-      deleteShoppingRecord(id)
+      }   
     },
     getReload() {
       this.reload() //调用刷新
     },
-    
-
   },
 }
 </script>
@@ -345,7 +439,7 @@ export default {
 ul li {
   list-style: none;
 }
-a{
+a {
   text-decoration: none;
   color: black;
 }
@@ -366,7 +460,7 @@ a{
         background-color: #d5dae4;
         overflow: hidden;
       }
-      .dialog{
+      .dialog {
         display: flex;
         justify-content: center;
         align-items: center;

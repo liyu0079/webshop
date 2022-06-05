@@ -56,7 +56,7 @@ export const changeUserPwd = (id, oriPwd, newPwd) => ajax(BASE_URL + '/api/chang
 export const changeUserPhone = (id, phone, code) => ajax(BASE_URL + '/api/change_user_phone', {id, phone, code}, 'POST');
 
 // 加入购物车
-export const addGoodsToCart = (user_id, goods_id, goods_name, thumb_url, price,buy_count, counts) => ajax(BASE_URL + '/api/add_shop_cart', {user_id, goods_id, goods_name, thumb_url, price, buy_count, counts}, 'POST');
+export const addGoodsToCart = (user_id, goods_id, goods_name, thumb_url, price,buy_count, total_amount, counts) => ajax(BASE_URL + '/api/add_shop_cart', {user_id, goods_id, goods_name, thumb_url, price, buy_count, total_amount, counts}, 'POST');
 
 // 单个商品数量的改变
 export const changeGoodsCount = (goods_id, count, user_id) => ajax(BASE_URL + '/api/change_goods_count', {goods_id, count, user_id}, 'POST');
@@ -76,6 +76,9 @@ export const deleteRecomGoods = (goods_id) => ajax(BASE_URL + '/api/delete_recom
 // 修改recommend单个商品
 export const changeGoodsInfo = (params) => ajax(BASE_URL + '/api/update_recom_goods', params, 'POST');
 
+// 修改recommend单个商品折扣
+export const discountGoods = (params) => ajax(BASE_URL + '/api/goods_discount', params, 'POST');
+
 // 请求购物车的数据
 export const getCartsGoods = (params) => ajax(BASE_URL + '/api/cart_goods', params);
 
@@ -92,22 +95,43 @@ export const updateReceiveInfo = (params)=> ajax(BASE_URL +'/api/update_receive_
 export const delteReceiveInfo = (id)=> ajax(BASE_URL +'/api/delete_receive_info',id,'POST');
 
 // 生成订单
-export const createTrade=(params)=> ajax(BASE_URL +'/api/create_trade',{params},'POST');
+export const createTrade=(params)=> ajax(BASE_URL +'/api/create_trade',params,'POST');
 
 // 查询订单记录
 export const getShoppingRecord=(user_id)=>ajax(BASE_URL + '/api/check_shopping_record',user_id);
 
+
+// 订单管理
+// 已付款未发货
+export const shoppingStepone = (id)=>ajax(BASE_URL+ '/api/shopping_step_one',{id},'POST');
+
+// 已付款已发货
+export const shoppingSteptwo = (id)=>ajax(BASE_URL+ '/api/shopping_step_two',{id},'POST');
+
+// 已付款已送达
+export const shoppingStepthree = (id)=>ajax(BASE_URL+ '/api/shopping_step_three',{id},'POST');
+
+// 已付款收货
+export const shoppingStepfour = (id)=>ajax(BASE_URL+ '/api/shopping_step_four',{id},'POST');
+
 // 完成订单
 export const finishShoppingRecord=(id)=>ajax(BASE_URL + '/api/finish_shopping',{id},'POST');
 
-// 取消订单
-export const cancelShoppingRecord=(id)=>ajax(BASE_URL + '/api/cancel_shopping_record',id,'POST');
+// 未付款已取消
+export const cancelShoppingRecord=(id)=>ajax(BASE_URL + '/api/cancel_shopping_record',{id},'POST');
+
+// 已付款退款中
+export const refundFirst=(id)=>ajax(BASE_URL + '/api/refund_first',{id},'POST');
+
+// 已付款已退款
+export const refundSecond=(id)=>ajax(BASE_URL + '/api/refund_second',{id},'POST');
 
 //删除单条订单
-export const deleteShoppingRecord = (id)=>ajax(BASE_URL + '/api/delete_shopping_record',id,'POST');
+export const deleteShoppingRecord = (id)=>ajax(BASE_URL + '/api/delete_shopping_record',{id},'POST');
 
 //删除所有订单记录
-export const deleteAllShoppingRecord = (user_id)=>ajax(BASE_URL + '/api/delete_All_shopping_record',user_id,'POST');
+export const deleteAllShoppingRecord = (user_id)=>ajax(BASE_URL + '/api/delete_All_shopping_record',{user_id},'POST');
+
 
 // 关键词搜索
 export const searchKeywords = (keywords) => ajax(BASE_URL + '/api/searchgoods', {keywords}, 'POST');

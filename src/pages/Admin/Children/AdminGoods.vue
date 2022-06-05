@@ -99,7 +99,6 @@ export default {
   },
   methods: {
     handleEdit(index, row) {
-      console.log(index, row)
       window.localStorage.setItem('goodsInfo', JSON.stringify(row))
       this.$router.replace('/admin/adminupdate')
     },
